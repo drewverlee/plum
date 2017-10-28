@@ -10,6 +10,10 @@ Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?st
 
 ## Development
 
+### Project managment
+
+checkout the [github project](Build Statu://github.com/drewverlee/plum/projects/1)
+
 ### Perquisites
 
 * [leinagain](https://leiningen.org/#install)
