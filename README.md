@@ -2,6 +2,8 @@
 
 Plum is a command line tool for sorting csv's containing rows of people.
 
+Build Status: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
+
 ## Usage
 
     $ java -jar plum-<VERSION>-standalone.jar <TODO> args
