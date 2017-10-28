@@ -1,36 +1,26 @@
 # plum
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
+Plum is a command line tool for sorting csv's containing rows of people.
 
 ## Usage
 
-FIXME: explanation
+    $ java -jar plum-<VERSION>-standalone.jar <TODO> args
 
-    $ java -jar plum-0.1.0-standalone.jar [args]
+## Development
 
-## Options
+### Perquisites
 
-FIXME: listing of options this app accepts.
+* [leinagain](https://leiningen.org/#install)
+* [clojure](https://clojure.org/guides/getting_started)
 
-## Examples
+### Testing
 
-...
+    $ lein test
+ 
+### Check Test Coverage
 
-### Bugs
+    $ lein cloverage
+    
+## To Build
 
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2017 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+    $ lein uberjar
