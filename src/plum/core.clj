@@ -1,5 +1,8 @@
 (ns plum.core
-  (:gen-class))
+  (:gen-class)
+  (:require [plum.command-line :as cl]))
 
 (defn -main
-  [& args])
+  [& args]
+  (println
+   (cl/parse-args args)))
