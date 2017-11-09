@@ -24,7 +24,7 @@
 (def cli-fn-names #{"sort"})
 (def sort-fn-names #{"last-name" "birth-date" "gender-and-lastname"})
 
-(s/def ::sort-fn-name #(= "sort" %)) 
+(s/def ::sort-fn-name #(= "sort" %))
 (s/def ::sort-fn-arg #(get sort-fn-names %))
 (s/def ::input-csv-arg #(.canRead (io/as-file %)))
 (s/def ::output-csv-arg #(.canWrite (io/as-file %)))
@@ -82,17 +82,8 @@
       (named-format "%arg~s failed because %reason~s" {:arg (name (last path)) :reason reason}) 
       (user-friendly-msg ctx leaf-spec val {:pos pos}))))
 
-
-
 (defn -main [& args]
   (if (not (s/valid? ::cli-input args))
     (do
       (user-friendly-msg :cli ::cli-input args {}))))
-
-
-
-(s/valid? nil? nil)  ;; true
-(s/invalid? nil? nil)  ;; true
-
-(-main "sort" "foo")
 
