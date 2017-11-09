@@ -2,4 +2,8 @@
   (:gen-class))
 
 (defn -main
-  [& args])
+  [& args]
+  (println args)
+  (println (first args)))
+
+
