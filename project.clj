@@ -5,9 +5,11 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha19"]
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/test.check "0.10.0-alpha2"]
-                 [phrase "0.1-alpha1"]
+                 
                  [com.gfredericks/like-format-but-with-named-args "0.1.3"]]
   :main ^:skip-aot plum.core
   :target-path "target/%s"
   :plugins [[lein-cloverage "1.0.9"]]
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+             :dev {:dependencies [[test-with-files "0.1.1"]]
+                   :resource-paths ["test/resources"]}})
