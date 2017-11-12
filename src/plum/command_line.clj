@@ -87,7 +87,7 @@
         ""]
        (str/join \newline)))
 
-;; (def cli-options [["-h" "--help"]])
+(def cli-options [["-h" "--help"]])
 
 (defn error-msg [errors]
   (str "The following errors occurred while parsing your command:\n\n"
