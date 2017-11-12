@@ -72,7 +72,7 @@
   [ctx spec x m]
   (let [{reason :reason path :path val :val leaf-spec :spec pos :pos} (get-problem-map-leaf spec x)]
     (if reason
-      (named-format "%arg~s failed because %reason~s" {:arg (name (last path)) :reason reason}) 
+      (named-format "%arg~s failed because %reason~s" {:arg (name (last path)) :reason reason})
       (user-friendly-msg ctx leaf-spec val {:pos pos}))))
 
 (defn usage
@@ -111,4 +111,6 @@
 
 (defmethod process-args :sort
   [{:keys [arguments]}])
+
+
 
