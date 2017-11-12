@@ -27,6 +27,12 @@
 (s/def ::cli-input (s/and ::cli-fns (s/or :sort ::sort)))
 
 (defn get-problem-map-leaf
+  "
+  Returns important information from the specs problem map
+  |:--
+  | `spec`| a registered clojure.core spec.
+  | `x`   | the value the spec will be called on.
+  "
   [spec x]
   (let [problem (first (:clojure.spec.alpha/problems (s/explain-data spec x)))]
     {:spec (last (:via problem))
@@ -37,16 +43,12 @@
 
 (defmulti user-friendly-msg (fn [ctx spec x m] [ctx spec]))
 
-  ;; (def help-msg "Try --help ")
-
 (defmethod user-friendly-msg [:cli ::cli-fns]
   [ctx spec x m]
   (let [{val :val} (get-problem-map-leaf spec x)]
     (named-format "%msg~s {%val~s} in position 0 isn't in the list of accepted functions: %cli-fns~s" {:msg cli-fn-msg
                                                                                                        :val (first val)
                                                                                                        :cli-fns (str/join "," cli-fn-names)})))
-
-
 
 (defmethod user-friendly-msg [:cli ::sort-fn]
   [ctx spec x m]
@@ -94,6 +96,10 @@
        (str/join \newline errors)))
 
 (defn args->action
+  "Returns the action the program should take based on the arguments provided by the user.
+  |:--
+  |`arg`| a vector of strings corresponding to the users input from the command line.
+  "
   [args]
   (let [{:keys [options arguments errors summary] :as input} (parse-opts args cli-options)]
     (cond
@@ -111,6 +117,3 @@
 
 (defmethod process-args :sort
   [{:keys [arguments]}])
-
-
-
