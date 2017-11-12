@@ -13,19 +13,6 @@
 (def input-csv-msg "The existing csv location")
 (def output-csv-msg "The existing csv output location")
 
-(def command-line-data
-  {:msg "sorts csvs"
-   :functions {:sort {:arguments {:names ["sort-fn" "input-csv" "output-csv"]
-                                  :msgs  [sort-csv-msg input-csv-msg output-csv-msg]}
-                      :msg cli-fn-msg}}})
-                      
-
-(defn usage
-  [cli-data])
-
-
-
-
 (s/def ::sort-fn-name #(= "sort" %))
 (s/def ::sort-fn #(get sort-fn-names %))
 (s/def ::input-csv #(.canRead (io/as-file %)))
@@ -50,12 +37,15 @@
 
 (defmulti user-friendly-msg (fn [ctx spec x m] [ctx spec]))
 
+  ;; (def help-msg "Try --help ")
+
 (defmethod user-friendly-msg [:cli ::cli-fns]
   [ctx spec x m]
   (let [{val :val} (get-problem-map-leaf spec x)]
     (named-format "%msg~s {%val~s} in position 0 isn't in the list of accepted functions: %cli-fns~s" {:msg cli-fn-msg
                                                                                                        :val (first val)
                                                                                                        :cli-fns (str/join "," cli-fn-names)})))
+
 
 
 (defmethod user-friendly-msg [:cli ::sort-fn]
@@ -65,7 +55,7 @@
 
 (defmethod user-friendly-msg [:cli ::input-csv]
   [ctx spec x m]
-  (named-format "%msg~s {%val~s} in position {%pos~s} can't be read!"
+  (named-format "%msg~s {%val~s} in position {%pos~s} can't be read! "
                 (merge (get-problem-map-leaf spec x) {:msg input-csv-msg} m)))
 
 (defmethod user-friendly-msg [:cli ::output-csv]
@@ -97,7 +87,7 @@
         ""]
        (str/join \newline)))
 
-(def cli-options [["-h" "--help"]])
+;; (def cli-options [["-h" "--help"]])
 
 (defn error-msg [errors]
   (str "The following errors occurred while parsing your command:\n\n"
