@@ -1,4 +1,5 @@
 (ns plum.command-line
+  "Command Line functions. Useful for parsing, validating and creating msgs for the user."
   (:require [clojure.spec.alpha :as s]
             [clojure.java.io :as io]
             [clojure.string :as str]
