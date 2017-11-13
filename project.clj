@@ -8,4 +8,6 @@
   :main ^:skip-aot plum.core
   :target-path "target/%s"
   :plugins [[lein-cloverage "1.0.9"]]
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+             :dev {:dependencies [[test-with-files "0.1.1"]]
+                   :resource-paths ["test/resources"]}})
