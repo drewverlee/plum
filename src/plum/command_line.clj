@@ -2,7 +2,9 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.java.io :as io]
             [clojure.string :as str]
-            [com.gfredericks.like-format-but-with-named-args :refer [named-format]]))
+            [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
+            [clojure.tools.cli :refer [parse-opts]]))
+
 
 (def cli-fn-names #{"sort"})
 (def sort-fn-names #{"last-name" "birth-date" "gender-and-lastname"})
@@ -74,3 +76,19 @@
     (if reason
       (named-format "%arg~s failed because %reason~s" {:arg (name (last path)) :reason reason})
       (user-friendly-msg ctx leaf-spec val {:pos pos}))))
+
+(defn usage
+  [options-summery]
+  (->> ["Sorts csvs"
+        "options"
+        options-summery
+        "Usage: sort sort-fn input-csv output-csv"
+        (str "arg        | pos | name ")
+        (str "sort       |  0  | " cli-fn-msg)
+        (str "sort-fn    |  1  | " sort-csv-msg " examples: " (str/join "," sort-fn-names))
+        (str "input-csv  |  2  | " input-csv-msg)
+        (str "output-csv |  3  | " output-csv-msg)
+        ""]
+       (str/join \newline)))
+
+(def cli-options [["-h" "--help"]])
