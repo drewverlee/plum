@@ -1,7 +1,9 @@
 (ns plum.core
-  (:gen-class))
+  (:gen-class)
+  (:require [plum.command-line :as cli]))
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (->> args
+       cli/args->action
+       cli/take-action))
