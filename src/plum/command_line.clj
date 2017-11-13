@@ -109,3 +109,13 @@
       errors                                    {:action :exit :exit-message (error-msg errors) :status :errors}
       (not (s/valid? ::cli-input args))         {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
       :process                                  {:action (keyword (first arguments)) :arguments arguments :options options})))
+
+(defmulti process-args (fn [{:keys [action]}] action))
+
+(defmethod process-args :exit
+  [{:keys [status exit-message]}]
+  (println exit-message)
+  (System/exit (status {:fine 0 :errors -1})))
+
+(defmethod process-args :sort
+  [{:keys [arguments]}])
