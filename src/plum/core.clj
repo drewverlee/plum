@@ -1,5 +1,9 @@
 (ns plum.core
-  (:gen-class))
+  (:gen-class)
+  (:require [plum.command-line :as cli]))
 
 (defn -main
-  [& args])
+  [& args]
+  (->> args
+       cli/args->action
+       cli/take-action))
