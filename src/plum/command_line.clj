@@ -111,12 +111,13 @@
       (not (s/valid? ::cli-input args))         {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
       :process                                  {:action (keyword (first arguments)) :arguments arguments :options options})))
 
-(defmulti process-args (fn [{:keys [action]}] action))
+(defmulti take-action (fn [{:keys [action]}] action))
 
-(defmethod process-args :exit
+(defmethod take-action :exit
   [{:keys [status exit-message]}]
   (println exit-message)
   (System/exit (status {:fine 0 :errors -1})))
 
-(defmethod process-args :sort
-  [{:keys [arguments]}])
+(defmethod take-action :sort
+  [{:keys [arguments]}]
+  (println "TODO implement sort"))
