@@ -92,3 +92,20 @@
        (str/join \newline)))
 
 (def cli-options [["-h" "--help"]])
+
+(defn error-msg [errors]
+    (str "The following errors occurred while parsing your command:\n\n"
+           (str/join \newline errors)))
+
+(defn args->action
+  "Returns the action the program should take based on the arguments provided by the user.
+  |:--
+  |`arg`| a vector of strings corresponding to the users input from the command line.
+  "
+  [args]
+  (let [{:keys [options arguments errors summary] :as input} (parse-opts args cli-options)]
+    (cond
+      (:help options)                           {:action :exit :exit-message (usage summary) :status :fine}
+      errors                                    {:action :exit :exit-message (error-msg errors) :status :errors}
+      (not (s/valid? ::cli-input args))         {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
+      :process                                  {:action (keyword (first arguments)) :arguments arguments :options options})))
