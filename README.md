@@ -14,7 +14,7 @@ Running the jar directly:
 
 Examples:
 
-* Asking for help
+Asking for help
 
     $ java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort --help
     Sorts csvs
@@ -27,7 +27,7 @@ Examples:
     input-csv  |  2  | The existing csv location
     output-csv |  3  | The existing csv output location
 
-* Giving the cli a bad inputs
+Giving the cli a bad inputs
 
     $ java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar bad-input
     The following errors occurred while parsing your command:
