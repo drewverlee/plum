@@ -2,6 +2,9 @@
   (:require [clj-time.format :as f]
             [clj-time.coerce :as c]
             [clj-time.core :as t]
+            [clojure.data.csv :as cd-csv]
+            [semantic-csv.core :as sc]
+            [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
             [clojure.string :as str]))
@@ -17,7 +20,7 @@
              (s/gen (s/inst-in #inst "1920" #inst "1985"))))
 
 (s/def ::date-of-birth
-  (s/with-gen #(string? %)
+  (s/with-gen string?
     (constantly date-gen)))
 
 (def base-spec
@@ -39,6 +42,17 @@
   [delimeter person]
   (as-> person p
     (cond-> p
-      (contains? p :date-of-birth) (update :date-of-birth #(f/unparse date-of-birth-formatter  %)))
+      (contains? p :date-of-birth) (update :date-of-birth #(f/unparse date-of-birth-formatter %)))
     (vals p)
     (str/join delimeter p)))
+
+(def attributes (take-nth 2 (rest (s/form ::entity))))
+
+(defn ->csv
+  [delimiter output-file persons]
+  (with-open [writer (io/writer output-file)]
+    (->> persons
+         (sc/cast-with {:date-of-birth #(f/unparse date-of-birth-formatter %)})
+         sc/vectorize
+         (cd-csv/write-csv writer))))
+

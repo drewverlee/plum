@@ -60,5 +60,3 @@
   (let [header person/attributes
         cast {:date-of-birth #(f/parse person/date-of-birth-formatter %)}]
     (->record csv header delimiter cast)))
-
-

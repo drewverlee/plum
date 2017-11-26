@@ -23,7 +23,7 @@ Asking for help
     Usage: sort sort-fn input-csv output-csv
     arg        | pos | name
     sort       |  0  | The base function
-    sort-fn    |  1  | The sort function to apply to the input csv examples: birth-date,last-name,gender-and-lastname
+    sort-fn    |  1  | The sort function to apply to the input csv examples: date-of-birth,last-name,gender-and-lastname
     input-csv  |  2  | The existing csv location
     output-csv |  3  | The existing csv output location
 

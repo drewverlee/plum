@@ -4,14 +4,16 @@
             [clojure.java.io :as io]
             [clojure.string :as str]
             [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
-            [clojure.tools.cli :refer [parse-opts]]))
+            [clojure.tools.cli :refer [parse-opts]]
+            [plum.csv :as csv]
+            [plum.sort-fns :as sort-fns]
+            [plum.person :as person]))
 
 
 (def cli-fn-names #{"sort"})
-(def sort-fn-names #{"last-name" "birth-date" "gender-and-lastname"})
 
 (s/def ::sort-fn-name #(= "sort" %))
-(s/def ::sort-fn #(get sort-fn-names %))
+(s/def ::sort-fn #(get sort-fns/names %))
 (s/def ::input-csv #(.canRead (io/as-file %)))
 (s/def ::output-csv #(.canWrite (io/as-file %)))
 
@@ -55,7 +57,7 @@
 (defmethod user-friendly-msg [:cli ::sort-fn]
   [ctx spec x m]
   (named-format "%msg~s {%val~s} in position {%pos~s} isn't in the list of accepted functions: %sort-fns~s"
-                (merge (get-problem-map-leaf spec x) {:msg sort-csv-msg :sort-fns (str/join "," sort-fn-names)} m)))
+                (merge (get-problem-map-leaf spec x) {:msg sort-csv-msg :sort-fns (str/join "," sort-fns/names)} m)))
 
 (defmethod user-friendly-msg [:cli ::input-csv]
   [ctx spec x m]
@@ -80,17 +82,17 @@
 
 (defn usage
   [options-summery]
-  (->> ["Sorts csvs"
-        "options"
-        options-summery
-        "Usage: sort sort-fn input-csv output-csv"
-        (str "arg        | pos | name ")
-        (str "sort       |  0  | " cli-fn-msg)
-        (str "sort-fn    |  1  | " sort-csv-msg " examples: " (str/join "," sort-fn-names))
-        (str "input-csv  |  2  | " input-csv-msg)
-        (str "output-csv |  3  | " output-csv-msg)
-        ""]
-       (str/join \newline)))
+  (str/join \newline
+   ["Sorts csvs"
+    "options"
+    options-summery
+    "Usage: sort sort-fn input-csv output-csv"
+    (str "arg        | pos | name ")
+    (str "sort       |  0  | " cli-fn-msg)
+    (str "sort-fn    |  1  | " sort-csv-msg " | examples: " (str/join "," sort-fns/names))
+    (str "input-csv  |  2  | " input-csv-msg)
+    (str "output-csv |  3  | " output-csv-msg)
+    ""]))
 
 (def cli-options [["-h" "--help"]])
 
@@ -120,4 +122,12 @@
 
 (defmethod take-action :sort
   [{:keys [arguments]}]
-  (println "TODO implement sort"))
+  (let [{:keys [sort-fn-name sort-fn input-csv output-csv]} (s/conform ::sort arguments)
+        delimiter (csv/get-delimiter (csv/peek input-csv))]
+    (->> (csv/->person delimiter input-csv)
+         ((sort-fns/user-choosen-fn->fn-implmentation sort-fn))
+         (person/->csv delimiter output-csv))))
+
+
+
+          
