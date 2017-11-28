@@ -25,7 +25,7 @@
 
 (def user-choosen-fn->fn-implmentation
   {"last-name" #(sort-by :last-name descending %)
-   "date-of-birth" #(sort-by :birth-date ascending %)
+   "date-of-birth" #(sort-by :date-of-birth ascending %)
    "gender-and-lastname" gender-and-lastname})
 
 (def names (set (keys user-choosen-fn->fn-implmentation)))
