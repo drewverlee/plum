@@ -89,12 +89,16 @@
     "Usage: sort sort-fn input-csv output-csv"
     (str "arg        | pos | name ")
     (str "sort       |  0  | " cli-fn-msg)
-    (str "sort-fn    |  1  | " sort-csv-msg " | examples: " (str/join "," sort-fns/names))
+    (str "sort-fn    |  1  | " sort-csv-msg " | options: " (str/join "," sort-fns/names))
     (str "input-csv  |  2  | " input-csv-msg)
     (str "output-csv |  3  | " output-csv-msg)
     ""]))
 
-(def cli-options [["-h" "--help"]])
+(def cli-options
+  [["-s" "--separator SEPARATOR" "separator used in output csv. Takes only first letter."
+    :default \,
+    :parse-fn #(.charAt % 0)]
+   ["-h" "--help"]])
 
 (defn error-msg [errors]
     (str "The following errors occurred while parsing your command:\n\n"
@@ -103,14 +107,14 @@
 (defn args->action
   "Returns the action the program should take based on the arguments provided by the user.
   |:--
-  |`arg`| a vector of strings corresponding to the users input from the command line.
+  |`args`| a vector of strings corresponding to the users input from the command line.
   "
   [args]
   (let [{:keys [options arguments errors summary] :as input} (parse-opts args cli-options)]
     (cond
       (:help options)                           {:action :exit :exit-message (usage summary) :status :fine}
       errors                                    {:action :exit :exit-message (error-msg errors) :status :errors}
-      (not (s/valid? ::cli-input args))         {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
+      (not (s/valid? ::cli-input arguments))    {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
       :process                                  {:action (keyword (first arguments)) :arguments arguments :options options})))
 
 (defmulti take-action (fn [{:keys [action]}] action))
@@ -121,13 +125,8 @@
   (System/exit (status {:fine 0 :errors -1})))
 
 (defmethod take-action :sort
-  [{:keys [arguments]}]
-  (let [{:keys [sort-fn-name sort-fn input-csv output-csv]} (s/conform ::sort arguments)
-        delimiter (csv/get-delimiter (csv/peek input-csv))]
-    (->> (csv/->person delimiter input-csv)
+  [{:keys [arguments options]}]
+  (let [{:keys [_ sort-fn input-csv output-csv]} (s/conform ::sort arguments)]
+    (->> (csv/->person input-csv)
          ((sort-fns/user-choosen-fn->fn-implmentation sort-fn))
-         (person/->csv delimiter output-csv))))
-
-
-
-          
+         (person/->csv (:separator options) output-csv))))
