@@ -2,6 +2,11 @@
 
 Plum is a command line tool for sorting csv's containing rows of people.
 
+## Demo
+
+There is a convenience script called create-sorted-outputs.sh, in the test/ folder.
+It runs all the command line functions to produce some csvs that demo the sort options.
+
 Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
 
 ## Usage
@@ -33,7 +38,7 @@ Giving the cli a bad inputs
     The following errors occurred while parsing your command:
 
     The base function {bad-input} in position 0 isn't in the list of accepted functions: sort
-
+    
 ## Development
 
 TODO
