@@ -1,12 +1,13 @@
 (ns plum.command-line-test
-  (:require 
-            [clojure.test :refer :all]
+  (:require [clojure.test :refer :all]
             [test-with-files.core :refer [with-files tmp-dir]]
             [clj-time.core :as t]
             [clojure.string :as str]
+            [clojure.spec.gen.alpha :as gen]
+            [clojure.spec.test.alpha :as stest]
             [plum.person :as person]
-            [plum.command-line :as cli]))
-            
+            [plum.command-line :as cli]
+            [clojure.spec.alpha :as s]))
 
 (deftest args->action
   (let [input-csv "/input.csv"
@@ -52,3 +53,9 @@
         (is (= (slurp expected-output-csv-path)
                (slurp output-csv-path))
             "should be sorted by last name descending")))))
+
+
+
+
+
+

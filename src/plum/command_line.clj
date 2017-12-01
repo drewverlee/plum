@@ -5,15 +5,23 @@
             [clojure.string :as str]
             [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
             [clojure.tools.cli :refer [parse-opts]]
-            [plum.csv :as csv]
             [plum.sort-fns :as sort-fns]
-            [plum.person :as person]))
+            [plum.person :as person]
+            [semantic-csv.core :as sc]))
 
 
 (def cli-fn-names #{"sort"})
 
-(s/def ::sort-fn-name #(= "sort" %))
-(s/def ::sort-fn #(get sort-fns/names %))
+
+
+(s/def ::sort-fn-name
+  (s/with-gen #(= "sort" %)
+    #(s/gen #{"sort"})))
+
+(s/def ::sort-fn
+  (s/with-gen #(get sort-fns/names %)
+    #(s/gen sort-fns/names)))
+
 (s/def ::input-csv #(.canRead (io/as-file %)))
 (s/def ::output-csv #(.canWrite (io/as-file %)))
 
@@ -127,6 +135,6 @@
 (defmethod take-action :sort
   [{:keys [arguments options]}]
   (let [{:keys [_ sort-fn input-csv output-csv]} (s/conform ::sort arguments)]
-    (->> (csv/->person input-csv)
+    (->> (sc/slurp-csv input-csv :header person/attributes :cast-fns {:date-of-birth person/date-of-birth->date-time})
          ((sort-fns/user-choosen-fn->fn-implmentation sort-fn))
-         (person/->csv (:separator options) output-csv))))
+         (sc/spit-csv output-csv {:cast-fns {:date-of-birth person/date-time->date-of-birth}}))))
