@@ -7,12 +7,9 @@
             [clojure.tools.cli :refer [parse-opts]]
             [plum.sort-fns :as sort-fns]
             [plum.person :as person]
-            [semantic-csv.core :as sc]))
-
+            [plum.csv :as csv]))
 
 (def cli-fn-names #{"sort"})
-
-
 
 (s/def ::sort-fn-name
   (s/with-gen #(= "sort" %)
@@ -134,7 +131,8 @@
 
 (defmethod take-action :sort
   [{:keys [arguments options]}]
-  (let [{:keys [_ sort-fn input-csv output-csv]} (s/conform ::sort arguments)]
-    (->> (sc/slurp-csv input-csv :header person/attributes :cast-fns {:date-of-birth person/date-of-birth->date-time})
+  (let [{:keys [_ sort-fn input-csv output-csv]} (s/conform ::sort arguments)
+        separator (csv/get-separator (csv/peek input-csv))]
+    (->> (csv/->person separator input-csv)
          ((sort-fns/user-choosen-fn->fn-implmentation sort-fn))
-         (sc/spit-csv output-csv {:cast-fns {:date-of-birth person/date-time->date-of-birth}}))))
+         (person/->csv (or (:separator options) separator) output-csv))))

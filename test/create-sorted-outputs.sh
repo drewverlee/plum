@@ -31,6 +31,22 @@ echo "----------------------3------------------------"
 cat resources/output-3.csv
 echo ""
 
+echo "testing with pip seperator"
+
+java -jar ../target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort gender-and-lastname resources/input-pip.csv resources/output-pip.csv
+
+echo "--------------- with pip -----------------------"
+cat resources/output-pip.csv
+
+echo ""
+
+echo "testing with space seperator"
+
+java -jar ../target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort gender-and-lastname resources/input-space.csv resources/output-space.csv
+
+echo "--------------- with space -----------------------"
+cat resources/output-space.csv
+
 echo ""
 echo "----------------------------------------------"
 echo "BONUS"
@@ -57,5 +73,18 @@ echo "--------------------------------------------------------------------------
 java -jar ../target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort lastname resources/input.csv idontexistfile
 echo "---------------------------------------------------------------------------"
 echo ""
-echo "DONE. Thanks for running the demo!"
+echo "with seperator"
 
+echo "java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort last-name resources/input.csv resources/output-extra.csv --separator X"
+echo ""
+
+echo "---------------------------------------------------------------------------"
+java -jar ../target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort last-name resources/input.csv resources/output-extra.csv --separator X
+echo "---------------------------------------------------------------------------"
+echo ""
+echo "produces..."
+echo "--------------- with X separator -----------------------"
+cat resources/output-extra.csv
+
+echo ""
+echo "DONE. Thanks for running the demo!"
