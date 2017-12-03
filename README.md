@@ -41,7 +41,15 @@ Giving the cli a bad inputs
     
 ## Development
 
-TODO
+Checklist:
+
+* Follow the Demo instructions to understand how the app works.
+* Make sure you have the preprequistes
+* Run the tests
+
+It should be easy to add more commandline actions and sorting functions. 
+Flexability in other area's will need consideration.
+
 
 ### Project managment
 
