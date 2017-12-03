@@ -2,6 +2,11 @@
 
 Plum is a command line tool for sorting csv's containing rows of people.
 
+## Demo
+
+There is a convenience script called create-sorted-outputs.sh, in the test/ folder.
+It runs all the command line functions to produce some csvs that demo the sort options.
+
 Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
 
 ## Usage
@@ -23,7 +28,7 @@ Asking for help
     Usage: sort sort-fn input-csv output-csv
     arg        | pos | name
     sort       |  0  | The base function
-    sort-fn    |  1  | The sort function to apply to the input csv examples: birth-date,last-name,gender-and-lastname
+    sort-fn    |  1  | The sort function to apply to the input csv examples: date-of-birth,last-name,gender-and-lastname
     input-csv  |  2  | The existing csv location
     output-csv |  3  | The existing csv output location
 
@@ -33,10 +38,18 @@ Giving the cli a bad inputs
     The following errors occurred while parsing your command:
 
     The base function {bad-input} in position 0 isn't in the list of accepted functions: sort
-
+    
 ## Development
 
-TODO
+Checklist:
+
+* Follow the Demo instructions to understand how the app works.
+* Make sure you have the preprequistes
+* Run the tests
+
+It should be easy to add more commandline actions and sorting functions. 
+Flexability in other area's will need consideration.
+
 
 ### Project managment
 

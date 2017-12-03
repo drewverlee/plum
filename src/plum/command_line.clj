@@ -4,14 +4,24 @@
             [clojure.java.io :as io]
             [clojure.string :as str]
             [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
-            [clojure.tools.cli :refer [parse-opts]]))
+            [clojure.tools.cli :refer [parse-opts]]
+            [plum.sort-fns :as sort-fns]
+            [plum.person :as person]
+            [semantic-csv.core :as sc]))
 
 
 (def cli-fn-names #{"sort"})
-(def sort-fn-names #{"last-name" "birth-date" "gender-and-lastname"})
 
-(s/def ::sort-fn-name #(= "sort" %))
-(s/def ::sort-fn #(get sort-fn-names %))
+
+
+(s/def ::sort-fn-name
+  (s/with-gen #(= "sort" %)
+    #(s/gen #{"sort"})))
+
+(s/def ::sort-fn
+  (s/with-gen #(get sort-fns/names %)
+    #(s/gen sort-fns/names)))
+
 (s/def ::input-csv #(.canRead (io/as-file %)))
 (s/def ::output-csv #(.canWrite (io/as-file %)))
 
@@ -55,7 +65,7 @@
 (defmethod user-friendly-msg [:cli ::sort-fn]
   [ctx spec x m]
   (named-format "%msg~s {%val~s} in position {%pos~s} isn't in the list of accepted functions: %sort-fns~s"
-                (merge (get-problem-map-leaf spec x) {:msg sort-csv-msg :sort-fns (str/join "," sort-fn-names)} m)))
+                (merge (get-problem-map-leaf spec x) {:msg sort-csv-msg :sort-fns (str/join "," sort-fns/names)} m)))
 
 (defmethod user-friendly-msg [:cli ::input-csv]
   [ctx spec x m]
@@ -80,19 +90,23 @@
 
 (defn usage
   [options-summery]
-  (->> ["Sorts csvs"
-        "options"
-        options-summery
-        "Usage: sort sort-fn input-csv output-csv"
-        (str "arg        | pos | name ")
-        (str "sort       |  0  | " cli-fn-msg)
-        (str "sort-fn    |  1  | " sort-csv-msg " examples: " (str/join "," sort-fn-names))
-        (str "input-csv  |  2  | " input-csv-msg)
-        (str "output-csv |  3  | " output-csv-msg)
-        ""]
-       (str/join \newline)))
+  (str/join \newline
+   ["Sorts csvs"
+    "options"
+    options-summery
+    "Usage: sort sort-fn input-csv output-csv"
+    (str "arg        | pos | name ")
+    (str "sort       |  0  | " cli-fn-msg)
+    (str "sort-fn    |  1  | " sort-csv-msg " | options: " (str/join "," sort-fns/names))
+    (str "input-csv  |  2  | " input-csv-msg)
+    (str "output-csv |  3  | " output-csv-msg)
+    ""]))
 
-(def cli-options [["-h" "--help"]])
+(def cli-options
+  [["-s" "--separator SEPARATOR" "separator used in output csv. Takes only first letter."
+    :default \,
+    :parse-fn #(.charAt % 0)]
+   ["-h" "--help"]])
 
 (defn error-msg [errors]
     (str "The following errors occurred while parsing your command:\n\n"
@@ -101,14 +115,14 @@
 (defn args->action
   "Returns the action the program should take based on the arguments provided by the user.
   |:--
-  |`arg`| a vector of strings corresponding to the users input from the command line.
+  |`args`| a vector of strings corresponding to the users input from the command line.
   "
   [args]
   (let [{:keys [options arguments errors summary] :as input} (parse-opts args cli-options)]
     (cond
       (:help options)                           {:action :exit :exit-message (usage summary) :status :fine}
       errors                                    {:action :exit :exit-message (error-msg errors) :status :errors}
-      (not (s/valid? ::cli-input args))         {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
+      (not (s/valid? ::cli-input arguments))    {:action :exit :exit-message (error-msg [(user-friendly-msg :cli ::cli-input arguments {})]) :status :errors}
       :process                                  {:action (keyword (first arguments)) :arguments arguments :options options})))
 
 (defmulti take-action (fn [{:keys [action]}] action))
@@ -119,5 +133,8 @@
   (System/exit (status {:fine 0 :errors -1})))
 
 (defmethod take-action :sort
-  [{:keys [arguments]}]
-  (println "TODO implement sort"))
+  [{:keys [arguments options]}]
+  (let [{:keys [_ sort-fn input-csv output-csv]} (s/conform ::sort arguments)]
+    (->> (sc/slurp-csv input-csv :header person/attributes :cast-fns {:date-of-birth person/date-of-birth->date-time})
+         ((sort-fns/user-choosen-fn->fn-implmentation sort-fn))
+         (sc/spit-csv output-csv {:cast-fns {:date-of-birth person/date-time->date-of-birth}}))))
