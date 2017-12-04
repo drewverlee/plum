@@ -1,44 +1,23 @@
 # plum
 
-Plum is a command line tool for sorting csv's containing rows of people.
-
-## Demo
-
-There is a convenience script called create-sorted-outputs.sh, in the test/ folder.
-It runs all the command line functions to produce some csvs that demo the sort options.
+Plum is a RESTFUL API.
 
 Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
 
-## Usage
+This means its a webapp/server that has endpoints that return JSON.
 
-Running the jar directly:
+Its primary motiviation is for accepting, sorting and returning JSON records of people: last-name,first-name,etc..
 
-    $ java -jar plum-<VERSION>-standalone.jar sort sort-fn input.csv output.csv
+See the swagger docs for more
 
-    run `sort --help` for more information
+## Swagger docs
 
-Examples:
+TODO
 
-Asking for help
+## To start server
 
-    $ java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort --help
-    Sorts csvs
-    options
-      -h, --help
-    Usage: sort sort-fn input-csv output-csv
-    arg        | pos | name
-    sort       |  0  | The base function
-    sort-fn    |  1  | The sort function to apply to the input csv examples: date-of-birth,last-name,gender-and-lastname
-    input-csv  |  2  | The existing csv location
-    output-csv |  3  | The existing csv output location
+TODO
 
-Giving the cli a bad inputs
-
-    $ java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar bad-input
-    The following errors occurred while parsing your command:
-
-    The base function {bad-input} in position 0 isn't in the list of accepted functions: sort
-    
 ## Development
 
 Checklist:
@@ -71,3 +50,7 @@ checkout the [github project](https://github.com/drewverlee/plum/projects/1)
 ## To Build
 
     $ lein uberjar
+
+
+
+
