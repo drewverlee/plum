@@ -56,10 +56,6 @@
     #(gen/fmap (fn [{:keys [separator person]}] (str/join separator (vals person)))
                (gen/hash-map :separator (s/gen ::separator) :person (s/gen ::entity)))))
 
-;; feels shaky
 (def attributes (last (s/form ::entity)))
 
-(s/exercise ::record)
-
-
-
+(s/conform ::record (first (first (s/exercise ::record 1))))
