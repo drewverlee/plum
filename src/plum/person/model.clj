@@ -38,14 +38,6 @@
 (s/def ::person (s/keys :req-un [::last-name ::first-name ::gender ::favorite-color ::date-of-birth]))
 (def attributes (last (s/form ::person)))
 
-(defn remove-ns
-  [coll]
-  (map #(ns-unmap (ns-name *ns*) %) coll))
-
-(remove-ns attributes)
-
-attributes
-
 ;; conversion
 (defn ->response
   [person]
