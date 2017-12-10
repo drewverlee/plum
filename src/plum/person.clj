@@ -5,8 +5,9 @@
             [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
-            [clojure.string :as str]
-            [plum.person :as person]))
+            [spec-tools.spec :as spec]
+            [clojure.string :as str]))
+            
 
 (def date-of-birth-formatter (f/formatter "MM/dd/yyyy"))
 
@@ -55,29 +56,21 @@
 (def attributes (last (s/form ::record)))
 
 (s/def ::row
-  (s/and
-   (s/conformer #(str/split % (re-pattern (str "\\" (get-separator %)))))
-   (s/cat :last-name ::last-name :first-name ::first-name :gender ::gender :favorite-color ::favorite-color :date-of-birth ::date-of-birth-obj)))
+  (s/with-gen (s/and
+               (s/conformer #(str/split % (re-pattern (str "\\" (get-separator %)))))
+               (s/cat :last-name ::last-name :first-name ::first-name :gender ::gender :favorite-color ::favorite-color :date-of-birth ::date-of-birth-obj))
+    #(gen/fmap (fn [{:keys [record separator]}] (str/join separator (vals record)))
+               (gen/hash-map :record (s/gen ::record) :separator (s/gen ::separator)))))
+
+
+
 
 ;; for display purposes
 (def sep (str/join " or " (replace {" " "blankspace"} separators)))
 (def attr (str/join "," (map name attributes)))
-
-
-(-> (s/conform ::row "a,b,c,d,4/7/1980")
-    (update-in [:date-of-birth] date-time->date-of-birth))
 
 (def people (atom []))
 
 (defn add! [person]
   (swap! people (fn [people] (conj people person)))
   person)
-
-
-
-
-
-
-
-
-

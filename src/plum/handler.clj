@@ -2,37 +2,43 @@
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [plum.person :as person]
-            [com.gfredericks.like-format-but-with-named-args :as n]
-            [clojure.string :as str]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [spec-tools.spec :as spec]))
 
-
-
-;; (def app
-;;   (api
-;;     (context "/person" []
-;;       :description (n/named-format "person records contain the following attributes: %attr~s" {:attr person/attr})
-;;         (resource
-;;           {:coercsion :spec
-;;            :post {:summary "post a single person row."
-;;                   :parameters {:body-params {:person ::person/row}}
-;;                   :responses {200 {:schema {:person ::person/record}}}
-;;                   :handler (fn [{{:keys [person]} :query-params}]
-;;                              (ok {:person (update-in person [:date-of-birth] person/date-time->date-of-birth)}))}}))))
-
+(s/def ::person-map (s/keys :req-un [::person/record]))
+(s/def ::total spec/int?)
+(s/def ::total-map (s/keys :req-un [::total]))
 
 (s/def ::foo string?)
 
 (def app
   (api
-   (context "/api" []
-     (POST "/person" []
-       :body [person ::foo]))))
+   {:coercion nil}
+   {:swagger
+    {:ui "/api-docs"
+     :spec "/swagger.json"
+     :data {:info {:title "Plum API"
+                   :description "A restful API for working with person records"}
+            :tags [{:name "person", :description "add person records or retrieve sorted collections of them"}]}}}
 
-(-> {:uri "/api/person"
+   (context "/person" []
+            :tags ["person"]
+            
+            (POST "/" []
+              :summary "add a person to the people list and return person back."
+              :body-params [line :- spec/string?]
+              :return spec/string?
+              (ok {:line line})))))
+  
+(-> {:uri "/person"
      :request-method :post
-     :body-params "a,b,c,d,04/08/1840"}
+     :body-params {:line "a,b,c,d,04/07/1800"}}
     app
     :body
     slurp
     (cheshire.core/parse-string true))
+
+
+
+
+
