@@ -5,7 +5,8 @@
             [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [plum.person :as person]))
 
 (def date-of-birth-formatter (f/formatter "MM/dd/yyyy"))
 
@@ -22,7 +23,12 @@
     #(gen/fmap  (fn [d] (f/unparse date-of-birth-formatter (c/from-date d)))
                 (s/gen (s/inst-in #inst "1800" #inst "2020")))))
 
+(s/def ::date-of-birth-obj
+  (s/and
+   (s/conformer date-of-birth->date-time date-time->date-of-birth)))
+
 (def separators #{"," "|" " "})
+
 (def separator (gen/elements separators))
 
 (s/def ::separator
@@ -30,7 +36,7 @@
     (constantly separator)))
 
 (def base-spec
-  (s/with-gen (s/and #(not (separators %))  #(> (count %) 1))
+  (s/with-gen (s/and #(not (separators %))  #(> (count %) 0))
     #(s/gen string?)))
 
 (s/def ::last-name base-spec)
@@ -38,21 +44,40 @@
 (s/def ::gender base-spec)
 (s/def ::favorite-color base-spec)
 
-(s/def ::entity (s/keys :req [::last-name ::first-name ::gender ::favorite-color ::date-of-birth]))
+(s/def ::record (s/keys :req [::last-name ::first-name ::gender ::favorite-color ::date-of-birth]))
 
 (defn get-separator
   [s]
   (.charAt
-   (re-find #"[,|/|| ]" s)
+   (re-find (re-pattern (str "[/" (str/join "|/" separators) "]")) s)
    0))
 
-(defn parse-str [s re]
-  (-> s
-      (str/split re)))
+(def attributes (last (s/form ::record)))
 
-(s/def ::record
-  (s/with-gen string?
-    #(gen/fmap (fn [{:keys [separator person]}] (str/join separator (vals person)))
-               (gen/hash-map :separator (s/gen ::separator) :person (s/gen ::entity)))))
+(s/def ::row
+  (s/and
+   (s/conformer #(str/split % (re-pattern (str "\\" (get-separator %)))))
+   (s/cat :last-name ::last-name :first-name ::first-name :gender ::gender :favorite-color ::favorite-color :date-of-birth ::date-of-birth-obj)))
 
-(def attributes (last (s/form ::entity)))
+;; for display purposes
+(def sep (str/join " or " (replace {" " "blankspace"} separators)))
+(def attr (str/join "," (map name attributes)))
+
+
+(-> (s/conform ::row "a,b,c,d,4/7/1980")
+    (update-in [:date-of-birth] date-time->date-of-birth))
+
+(def people (atom []))
+
+(defn add! [person]
+  (swap! people (fn [people] (conj people person)))
+  person)
+
+
+
+
+
+
+
+
+

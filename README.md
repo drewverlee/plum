@@ -12,11 +12,7 @@ See the swagger docs for more
 
 ## Swagger docs
 
-TODO
-
-## To start server
-
-TODO
+visit the root url `/`
 
 ## Development
 
@@ -27,17 +23,13 @@ Checklist:
 * Run the tests
 
 It should be easy to add more commandline actions and sorting functions. 
-Flexability in other area's will need consideration.
+Flexibility in other area's will need consideration.
+
+### To start server
+
+    $ lein ring server
 
 
-### Project managment
-
-checkout the [github project](https://github.com/drewverlee/plum/projects/1)
-
-### Perquisites
-
-* [leinagain](https://leiningen.org/#install)
-* [clojure](https://clojure.org/guides/getting_started)
 
 ### Testing
 
@@ -47,10 +39,17 @@ checkout the [github project](https://github.com/drewverlee/plum/projects/1)
 
     $ lein cloverage
 
-## To Build
+### To Build
 
     $ lein uberjar
 
+### Project managements
 
+checkout the [github project](https://github.com/drewverlee/plum/projects/1)
+
+### Perquisites
+
+* [leinagain](https://leiningen.org/#install)
+* [clojure](https://clojure.org/guides/getting_started)
 
 
