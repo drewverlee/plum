@@ -16,19 +16,25 @@
 
 (def app
   (api
+   {:swagger
+    {:ui "/"
+     :spec "/swagger.json"
+     :data {:info {:title "Plum"
+                   :description "Operations over people records"}
+            :tags [{:name "records", :description "post records of people and get sorted collections of them."}]}}}
    (context "/records" []
-            :tags ["person" "records"]
+            :tags ["records"]
             :coercion :spec
             (POST "/" []
-              :summary "add a person record to the records list and return record back."
-              :body-params [person-line :- ::p-request/person]
+              :summary "Add a person record and echos record back"
+              :body-params [person-line :- ::p-request/person] 
               :return ::p-response/person
               (ok (->> person-line
                        p-request/->model
                        db/add!
                        p-model/->response)))
             (GET "/:sort-fn" []
-              :summary "returns sorted records. TODO more explain options"
+              :summary "returns records sorted by client selected function."
               :path-params [sort-fn :- ::sort-fns/fns]
               :return ::p-response/people
               (ok
