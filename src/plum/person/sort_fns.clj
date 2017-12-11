@@ -1,5 +1,6 @@
-(ns plum.sort-fns
-  (:require [clojure.string :as str]))
+(ns plum.person.sort-fns
+  (:require [clojure.string :as str]
+            [clojure.spec.alpha :as s]))
 
 (defn ascending
   [x y]
@@ -29,3 +30,14 @@
    "gender-and-lastname" gender-and-lastname})
 
 (def names (set (keys user-choosen-fn->fn-implmentation)))
+
+(defn get-fn
+  [fn-name]
+  (user-choosen-fn->fn-implmentation fn-name))
+
+;; spec
+
+(s/def ::fns #(names %))
+
+
+
