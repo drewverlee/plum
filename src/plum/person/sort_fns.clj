@@ -1,16 +1,18 @@
 (ns plum.person.sort-fns
   (:require [clojure.string :as str]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [spec-tools.core :as st]
+            [clojure.spec.gen.alpha :as gen]))
 
-(defn ascending
+(defn- ascending
   [x y]
   (compare x y))
 
-(defn descending
+(defn- descending
   [x y]
   (compare y x))
 
-(defn gender-order
+(defn- gender-order
   "Females > Males."
   [person]
   (->> person
@@ -18,26 +20,26 @@
        str/lower-case
        {"female" 1 "male" -1}))
 
-(defn gender-and-lastname
+(defn- gender-and-lastname
   [coll]
   (sort  #(compare [(gender-order %2) (:last-name %1)]
                    [(gender-order %1) (:last-name %2)])
          coll))
 
-(def user-choosen-fn->fn-implmentation
+(def name->fn
   {"last-name" #(sort-by :last-name descending %)
    "date-of-birth" #(sort-by :date-of-birth ascending %)
    "gender-and-lastname" gender-and-lastname})
 
-(def names (set (keys user-choosen-fn->fn-implmentation)))
+(def names (set (keys name->fn)))
 
-(defn get-fn
-  [fn-name]
-  (user-choosen-fn->fn-implmentation fn-name))
+(s/def ::names
+  (st/spec names
+   {:name "sort functions"
+    :description "A set of person sort functions."
+    :json-schema/example (first names)
+    :json-schema/default (first names)}))
 
-;; spec
-
-(s/def ::fns #(names %))
-
-
-
+(defn sort-with
+  [name coll]
+  ((name->fn name) coll))

@@ -1,2 +1,0 @@
-(ns plum.sort-fns)
-
