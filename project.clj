@@ -7,6 +7,7 @@
                  [clj-time "0.14.0"]
                  [metosin/compojure-api "2.0.0-alpha16"]
                  [com.gfredericks/like-format-but-with-named-args "0.1.3"]
+                 [ring/ring-mock "0.3.2"]
                  [metosin/spec-tools "0.3.2"]]
   :ring {:handler plum.handler/app}
   :uberjar-name "plum.jar"
