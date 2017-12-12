@@ -1,7 +1,9 @@
 (ns plum.person.routes
   (:require [ring.util.http-response :refer [ok]]
+            [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
             [compojure.api.sweet :refer [context POST GET]]
             [plum.person.model :as model]
+            [plum.person.core :as c]
             [plum.person.request :as request]
             [plum.person.response :as response]
             [plum.person.sort-fns :as sort-fns]
@@ -12,7 +14,9 @@
           :tags ["persons"]
           :coercion :spec
           (POST "/" []
-                :summary "Adds a person and returns it back."
+                :summary (named-format "Takes a person (in Line Form) and returns it back in (in model form).
+                                       Person (Line Form) is a string of person attributes joined by a separator: %separator~s."
+                                       {:separator c/sep})
                 :body-params [person :- ::request/person]
                 :return ::response/person
                 (ok (->> person
@@ -21,7 +25,9 @@
                          model/->response)))
 
           (GET "/:sort-fn" []
-                :summary (str "Returns sorted people. Sort functions include: " (str/join "," sort-fns/names))
+                :summary (named-format "Returns sorted people in model form as json.
+                                        Sort functions include: %sort-fns~s "
+                                       {:sort-fns (str/join "," sort-fns/names)})
                 :path-params [sort-fn :- ::sort-fns/names]
                 :return ::response/people
                 (ok (->> @model/people

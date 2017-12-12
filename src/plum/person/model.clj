@@ -35,6 +35,10 @@
 
 (def attributes (last (s/form ::person)))
 
+-;; for printing
+
+-(def attr (str/join "," (map name attributes)))
+
 ;; conversion
 (defn ->response
   [person]

@@ -1,7 +1,9 @@
 (ns plum.handler
   (:require [compojure.api.sweet :refer :all]
+            [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
             [ring.util.http-response :refer :all]
-            [plum.person.routes :as person]))
+            [plum.person.routes :as person]
+            [plum.person.model :as model]))
 
 (def app
   (api
@@ -10,7 +12,9 @@
      :spec "/swagger.json"
      :data {:info {:title "Plum"
                    :description "Operations over people records."}
-            :tags [{:name "persons", :description "Post records of people and get sorted collections of them."}]}}}
+            :tags [{:name "persons", :description (named-format "Post records of people and get sorted collections of them.
+                                                                 People records have the following attributes: %attributes~s"
+                                                                 {:attributes model/attr})}]}}}
    person/routes))
 
 ;; EXAMPLES
