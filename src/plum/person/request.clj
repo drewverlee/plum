@@ -14,8 +14,8 @@
     ;;NOTE: not showing up in schema like is promised
     :description "A set of person attributes joined by a separator."
     :type :string
-    :json-schema/example "john,smith,male,blue,04/07/1950"
-    :json-schema/default "john,smith,male,blue,04/07/1950"}))
+    :json-schema/example "smith,john,male,blue,04/07/1950"
+    :json-schema/default "smith,john,male,blue,04/07/1950"}))
 
 (defn- date-of-birth->date-time
   [dob]
@@ -31,6 +31,7 @@
    [:date-of-birth]
    date-of-birth->date-time))
 
-;;(->model "john,smith,male,blue,04/07/1950")
+;; Example of turning person string into person model
+;;(->model "smith,john,male,blue,04/07/1950")
 
-;;=>{:last-name "john", :first-name "smith", :gender "male", :favorite-color "blue", :date-of-birth #object[org.joda.time.DateTime 0x7756506b "1950-04-07T00:00:00.000Z"]}
+;; {:last-name "smith", :first-name "john", :gender "male", :favorite-color "blue", :date-of-birth #object[org.joda.time.DateTime 0x75c38812 "1950-04-07T00:00:00.000Z"]}
