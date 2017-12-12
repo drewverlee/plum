@@ -4,7 +4,8 @@
             [plum.person.model :as model]
             [plum.person.request :as request]
             [plum.person.response :as response]
-            [plum.person.sort-fns :as sort-fns]))
+            [plum.person.sort-fns :as sort-fns]
+            [clojure.string :as str]))
 
 (def routes
   (context "/persons" []
@@ -20,7 +21,7 @@
                          model/->response)))
 
           (GET "/:sort-fn" []
-                :summary "Returns sorted people."
+                :summary (str "Returns sorted people. Sort functions include: " (str/join "," sort-fns/names))
                 :path-params [sort-fn :- ::sort-fns/names]
                 :return ::response/people
                 (ok (->> @model/people
