@@ -4,11 +4,11 @@
             [spec-tools.core :as st]
             [clojure.spec.gen.alpha :as gen]))
 
-(defn- ascending
+(defn ascending
   [x y]
   (compare x y))
 
-(defn- descending
+(defn descending
   [x y]
   (compare y x))
 
