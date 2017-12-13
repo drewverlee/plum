@@ -10,8 +10,8 @@
                  [ring/ring-mock "0.3.2"]
                  [metosin/spec-tools "0.3.2"]]
   :ring {:handler plum.handler/app}
-  :uberjar-name "plum.jar"
-  :uberware-name "plum.war"
+  :uberjar-name "plum-server.jar"
+  :uberware-name "plum-server.war"
   :target-path "target/%s"
   :plugins [[lein-cloverage "1.0.9"]]
   :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]
