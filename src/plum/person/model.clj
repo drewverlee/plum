@@ -1,4 +1,5 @@
 (ns plum.person.model
+  "Functions and specs for a person map. Also contains a stateful atom for storing people (persons)."
   (:require [clj-time.format :as f]
             [clj-time.coerce :as c]
             [clj-time.core :as t]

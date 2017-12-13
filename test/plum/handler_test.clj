@@ -1,4 +1,5 @@
 (ns plum.handler-test
+  "API server entrypoint"
   (:require [clojure.test :refer :all]
             [ring.mock.request :as mock]
             [plum.test-helpers :as h]

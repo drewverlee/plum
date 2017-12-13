@@ -1,4 +1,5 @@
 (ns plum.person.sort-fns
+  "Sort functions intended to work over collections person maps."
   (:require [clojure.string :as str]
             [clojure.spec.alpha :as s]
             [spec-tools.core :as st]

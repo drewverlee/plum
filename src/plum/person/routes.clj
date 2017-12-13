@@ -1,4 +1,5 @@
 (ns plum.person.routes
+  "Contains api routes for dealing with persons."
   (:require [ring.util.http-response :refer [ok]]
             [com.gfredericks.like-format-but-with-named-args :refer [named-format]]
             [compojure.api.sweet :refer [context POST GET]]
