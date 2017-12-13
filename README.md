@@ -4,7 +4,8 @@ Plum is a restful api that accepts and returns sorted people records.
 
 Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
 
-See the swagger docs for more
+See the *Demo* section for more on how to run the project.
+See the swagger docs for more on the API.
 
 ## Swagger docs
 
@@ -23,6 +24,9 @@ Flexibility in other area's will need consideration.
 
 ### Demo
 
+see `/test/demo.sh` its a executable script that starts the server
+and makes api calls. It assumes you have all the preprequistes.
+
 ### To start server
 
     $ lein ring server
@@ -35,9 +39,13 @@ Flexibility in other area's will need consideration.
 
     $ lein cloverage
 
-### To Build
+### To Build server
 
-    $ lein uberjar
+    $ lein do clean, ring uberjar
+
+### To run server
+
+    $  java -jar ../target/uberjar/plum-server.jar
 
 ### Project managements
 
@@ -47,5 +55,3 @@ checkout the [github project](https://github.com/drewverlee/plum/projects/1)
 
 * [leinagain](https://leiningen.org/#install)
 * [clojure](https://clojure.org/guides/getting_started)
-
-
