@@ -22,7 +22,7 @@
 
 ;; person spec
 (def base-spec
-  (s/with-gen (s/and #(not (core/separators %))  #(> (count %) 0))
+  (s/with-gen (s/and #(not (core/separators %))  #(pos? (count %)))
     #(s/gen string?)))
 
 (s/def ::last-name base-spec)
