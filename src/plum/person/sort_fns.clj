@@ -43,5 +43,5 @@
     :json-schema/default (first names)}))
 
 (defn sort-with
-  [name coll]
-  ((name->fn name) coll))
+  [sort-name coll]
+  ((name->fn sort-name) coll))
