@@ -44,4 +44,5 @@
   [person]
   (update-in person [:date-of-birth] date-time->date-of-birth))
 
+;;State mechanism
 (def people (atom [] :validator #(s/valid? ::people %)))
