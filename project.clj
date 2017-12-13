@@ -12,6 +12,7 @@
   :ring {:handler plum.handler/app}
   :uberjar-name "plum.jar"
   :uberware-name "plum.war"
+  :target-path "target/%s"
   :plugins [[lein-cloverage "1.0.9"]]
   :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]
                                   [expound "0.3.4"]]
