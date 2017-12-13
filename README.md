@@ -1,18 +1,14 @@
 # plum
 
-Plum is a RESTFUL API.
+Plum is a restful api that accepts and returns sorted people records.
 
 Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
-
-This means its a webapp/server that has endpoints that return JSON.
-
-Its primary motiviation is for accepting, sorting and returning JSON records of people: last-name,first-name,etc..
 
 See the swagger docs for more
 
 ## Swagger docs
 
-visit the root url `/`
+visit the root url `/` you should expect to be greeted by an interactive API.
 
 ## Development
 
@@ -25,11 +21,11 @@ Checklist:
 It should be easy to add more commandline actions and sorting functions. 
 Flexibility in other area's will need consideration.
 
+### Demo
+
 ### To start server
 
     $ lein ring server
-
-
 
 ### Testing
 

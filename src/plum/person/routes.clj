@@ -14,8 +14,8 @@
           :tags ["persons"]
           :coercion :spec
           (POST "/" []
-                :summary (named-format "Takes a person (in Line Form) and returns it back in (in model form).
-                                       Person (Line Form) is a string of person attributes joined by a separator: %separator~s."
+                :summary (named-format "Takes person attributes joined by a separator as a string and returns it back to the client as json.
+                                        separators include: %separator~s."
                                        {:separator c/sep})
                 :body-params [person :- ::request/person]
                 :return ::response/person
@@ -26,7 +26,7 @@
                          model/->response)))
 
           (GET "/:sort-fn" []
-                :summary (named-format "Returns sorted people in model form as json.
+                :summary (named-format "Returns sorted people as json.
                                         Sort functions include: %sort-fns~s "
                                        {:sort-fns (str/join "," sort-fns/names)})
                 :path-params [sort-fn :- ::sort-fns/names]

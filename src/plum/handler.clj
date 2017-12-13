@@ -11,16 +11,16 @@
     {:ui "/"
      :spec "/swagger.json"
      :data {:info {:title "Plum"
-                   :description "Operations over people records."}
-            :tags [{:name "persons", :description (named-format "Post records of people and get sorted collections of them.
-                                                                 People records have the following attributes: %attributes~s"
+                   :description "Operations over person records."}
+            :tags [{:name "persons", :description (named-format "Add a person record OR get sorted collections of them.
+                                                                 Person records have the following attributes: %attributes~s"
                                                                  {:attributes model/attr})}]}}}
    person/routes))
 
 ;; EXAMPLES
 
 ;;Example of how POST a person
-;; (-> {:uri "/persons"
+;; (-> {:uri "/records"
 ;;      :request-method :post
 ;;      :body-params {:person "a,b,c,d,04/07/1800"}}
 ;;     app
