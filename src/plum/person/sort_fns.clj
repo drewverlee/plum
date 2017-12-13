@@ -21,6 +21,8 @@
        {"female" 1 "male" -1}))
 
 (defn- gender-and-lastname
+  "Return a sorted collection.
+  Sort order: Females > Males then by last name ascending."
   [coll]
   (sort  #(compare [(gender-order %2) (:last-name %1)]
                    [(gender-order %1) (:last-name %2)])
