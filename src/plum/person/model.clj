@@ -44,9 +44,4 @@
   [person]
   (update-in person [:date-of-birth] date-time->date-of-birth))
 
-;; stateful operations
 (def people (atom [] :validator #(s/valid? ::people %)))
-
-(defn add-and-echo! [db person]
-  (swap! db (fn [db] (conj db person)))
-  person)

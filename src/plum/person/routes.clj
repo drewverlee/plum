@@ -21,7 +21,8 @@
                 :return ::response/person
                 (ok (->> person
                          request/->model
-                         (model/add-and-echo! model/people)
+                         (swap! model/people conj)
+                         last
                          model/->response)))
 
           (GET "/:sort-fn" []
