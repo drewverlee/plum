@@ -19,8 +19,11 @@ Checklist:
 * Make sure you have the preprequistes
 * Run the tests
 
-It should be easy to add more commandline actions and sorting functions. 
-Flexibility in other area's will need consideration.
+### Design considerations
+
+* It should be easy to add more  sorting functions as a path param argument. 
+* Coercion on the person string is difficult and is had to work into compjure-api's 
+  design choice to use schema/spec as the coercion method.
 
 ### Demo
 

@@ -20,16 +20,16 @@
 ;; EXAMPLES
 
 ;;Example of how POST a person
-;; (-> {:uri "/records"
+;; (-> {:uri "/persons"
 ;;      :request-method :post
-;;      :body-params {:person "a,b,c,d,04/07/1800"}}
+;;      :body-params {:person "smith,john,male,blue,04/07/1800"}}
 ;;     app
 ;;     :body
 ;;     slurp
 ;;     (cheshire.core/parse-string true))
 
 ;; returns a person
-;;=> {:last-name "a", :first-name "b", :gender "c", :favorite-color "d", :date-of-birth "04/07/1800"}
+;;=> {:last-name "smith", :first-name "john", :gender "male", :favorite-color "blue", :date-of-birth "04/07/1800"}
 
 ;;Example of how to GET a sorted collection of people
 ;; (-> {:uri "/persons/date-of-birth"
@@ -40,5 +40,5 @@
 ;;     (cheshire.core/parse-string true))
 
 ;; returns sorted people
-;; => ({:last-name "a", :first-name "b", :gender "c", :favorite-color "d", :date-of-birth "04/07/1800"}
-;;     {:last-name "a", :first-name "b", :gender "c", :favorite-color "d", :date-of-birth "04/07/1800"}))
+;; => ({:last-name "smith", :first-name "john", :gender "male", :favorite-color "blue", :date-of-birth "04/07/1800"}
+;;     {:last-name "smith", :first-name "john", :gender "male", :favorite-color "blue", :date-of-birth "04/07/1800"})

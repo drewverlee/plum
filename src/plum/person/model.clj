@@ -11,7 +11,6 @@
             [clojure.set :as set]))
 
 ;;date of birth
-
 (s/def ::date-of-birth
   (s/with-gen #(instance? org.joda.time.DateTime %)
     #(gen/fmap  c/from-date
@@ -37,7 +36,6 @@
 (def attributes (last (s/form ::person)))
 
 -;; for printing
-
 -(def attr (str/join "," (map name attributes)))
 
 ;; conversion

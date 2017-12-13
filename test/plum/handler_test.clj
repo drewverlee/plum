@@ -13,6 +13,7 @@
 ;; see docs on testing compojure-api endpoints: https://github.com/metosin/compojure-api/wiki/Testing-api-endpoints
 
 (deftest api
+
   (testing "POST /persons | with person string returns a person as json." ;; we pass in the people atom as a fresh resource each time a test is run.
     (h/with-resource person.model/people
       (fn [resource]
@@ -20,8 +21,9 @@
                                          (mock/content-type "application/json")
                                          (mock/body (h/create-body {:person "john,smith,male,blue,04/07/1950"}))))
                body (h/parse-body (:body response))]
-           (is (= "smith" (get-in {:person {:last-name "smith"}} [:person :last-name])))
-           (is (= 1 (count @resource))))])))
+           (is (= "smith" (get-in {:person {:last-name "smith"}} [:person :last-name])) "Person should be returned to client.")
+           (is (= 1 (count @resource)) "Person should be stored."))])))
+
   (testing "GET /persons/:sort-fn | with a sort function returns sorted people records as json."
       (h/with-resource person.model/people
         (fn [resource]
@@ -29,6 +31,6 @@
                  response (handler/app (-> (mock/request :get "/persons/last-name")
                                            (mock/content-type "application/json")))
                  body      (h/parse-body (:body response))]
-             (is (= people @resource) "people contains only the records inserted")
-             (is (= (map (comp set keys) body)  (map (comp set keys) @resource)) "They contain the same attributes")
-             (is (= body (sort-by :last-name sort-fns/descending body)) "the return value is sorted by last name"))]))))
+             (is (= people @resource) "People Atom contains only the people inserted")
+             (is (= (map (comp set keys) body)  (map (comp set keys) @resource)) "The response (people) should have the same properties as the stored state.")
+             (is (= body (sort-by :last-name sort-fns/descending body)) "The response (people) is sorted by last name"))]))))
