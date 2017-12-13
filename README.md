@@ -1,44 +1,16 @@
 # plum
 
-Plum is a command line tool for sorting csv's containing rows of people.
-
-## Demo
-
-There is a convenience script called create-sorted-outputs.sh, in the test/ folder.
-It runs all the command line functions to produce some csvs that demo the sort options.
+Plum is a restful api that accepts and returns sorted people records.
 
 Master Branch Tests: [![CircleCI](https://circleci.com/gh/drewverlee/plum.svg?style=svg&circle-token=e36a553b9697f3352402f167b2a06a33f5304d75)](https://circleci.com/gh/drewverlee/plum)
 
-## Usage
+See the *Demo* section for more on how to run the project.
+See the swagger docs for more on the API.
 
-Running the jar directly:
+## Swagger docs
 
-    $ java -jar plum-<VERSION>-standalone.jar sort sort-fn input.csv output.csv
+visit the root url `/` you should expect to be greeted by an interactive API.
 
-    run `sort --help` for more information
-
-Examples:
-
-Asking for help
-
-    $ java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar sort --help
-    Sorts csvs
-    options
-      -h, --help
-    Usage: sort sort-fn input-csv output-csv
-    arg        | pos | name
-    sort       |  0  | The base function
-    sort-fn    |  1  | The sort function to apply to the input csv examples: date-of-birth,last-name,gender-and-lastname
-    input-csv  |  2  | The existing csv location
-    output-csv |  3  | The existing csv output location
-
-Giving the cli a bad inputs
-
-    $ java -jar target/uberjar/plum-0.1.0-SNAPSHOT-standalone.jar bad-input
-    The following errors occurred while parsing your command:
-
-    The base function {bad-input} in position 0 isn't in the list of accepted functions: sort
-    
 ## Development
 
 Checklist:
@@ -47,18 +19,20 @@ Checklist:
 * Make sure you have the preprequistes
 * Run the tests
 
-It should be easy to add more commandline actions and sorting functions. 
-Flexability in other area's will need consideration.
+### Design considerations
 
+* It should be easy to add more  sorting functions as a path param argument. 
+* Coercion on the person string is difficult and is had to work into compjure-api's 
+  design choice to use schema/spec as the coercion method.
 
-### Project managment
+### Demo
 
-checkout the [github project](https://github.com/drewverlee/plum/projects/1)
+see `/test/demo.sh` its a executable script that starts the server
+and makes api calls. It assumes you have all the preprequistes.
 
-### Perquisites
+### To start server
 
-* [leinagain](https://leiningen.org/#install)
-* [clojure](https://clojure.org/guides/getting_started)
+    $ lein ring server
 
 ### Testing
 
@@ -68,6 +42,19 @@ checkout the [github project](https://github.com/drewverlee/plum/projects/1)
 
     $ lein cloverage
 
-## To Build
+### To Build server
 
-    $ lein uberjar
+    $ lein do clean, ring uberjar
+
+### To run server
+
+    $  java -jar ../target/uberjar/plum-server.jar
+
+### Project managements
+
+checkout the [github project](https://github.com/drewverlee/plum/projects/1)
+
+### Perquisites
+
+* [leinagain](https://leiningen.org/#install)
+* [clojure](https://clojure.org/guides/getting_started)
